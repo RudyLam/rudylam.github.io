@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Rudy Lam - MSc Thesis student at SFU GRuVi Lab">
+    <meta name="author" content="Rudy Lam">
+    <!--meta property="og:image" content="dp_1.jpeg"!-->
+    <title>Rudy Lam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="stylesheet.css">
+    <!--link rel="icon" href="thumbnail.jpg" type="image/png"!-->
+    <style>
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 12px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #toast.show {
+            visibility: visible;
+            animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        }
+
+        @keyframes fadein {
+            from {
+                bottom: 0;
+                opacity: 0;
+            }
+
+            to {
+                bottom: 30px;
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeout {
+            from {
+                bottom: 30px;
+                opacity: 1;
+            }
+
+            to {
+                bottom: 0;
+                opacity: 0;
+            }
+        }
+
+        /* Publication Hover Effects */
+        .publication {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 2rem !important;
+        }
+
+        .publication:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        body.dark-mode .publication:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .pub-abstract {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 6px 0;
+            line-height: 1.4;
+            font-style: italic;
+        }
+
+        body.dark-mode .pub-abstract {
+            color: #aaa;
+        }
+
+        /* Scroll-Spy Active Links */
+        .nav-links a.active {
+            color: #ffcc00 !important;
+            font-weight: 700;
+        }
+
+        body.dark-mode .nav-links a.active {
+            color: #8ab4f8 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // Restore user's previous theme choice if they have one
+        (function () {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+        })();
+    </script>
+    <header class="navbar">
+        <div class="container">
+            <div class="logo">Rudy Lam</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <!--li><a href="#talks">Talks</a></li>
+                    <li><a href="cv.html">CV</a></li!-->
+                </ul>
+            </nav>
+            <div class="nav-icons">
+                <i class="fas fa-moon" id="theme-toggle"></i>
+            </div>
+        </div>
+    </header>
+
+    <section id="about">
+        <div class="container">
+            <div class="section-wrapper">
+                <div class="section-title">About</div>
+                <div class="section-content">
+                </div>
+            </div>
+            <div class="about-wrapper">
+                <div class="about-left">
+                    <img src="ProfilePic.jpg" alt="Profile Photo" class="profile-pic">
+                    <h2>Rudy Lam</h2>
+                    <p class="role">MSc Thesis Student @ SFU Computing Science, Burnaby</p>
+                    <div class="social-icons">
+                        <a href="mailto:rudy_lam@sfu.ca" onclick="copyEmail(event, 'rudy_lam@sfu.ca')">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <!--a href=""><i
+                                class="fab fa-google"></i></a!-->
+                        <a href="https://github.com/RudyLam"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/rudy-lam/"><i
+                                class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="about-right">
+                    <p>
+                        I am a thesis-based MSc student in Computing Science at <a href="https://www.sfu.ca/computing.html">Simon Fraser University</a>,
+                        advised by <a href="https://theialab.ca">Prof. Andrea Tagliasacchi</a>.
+                        Before starting graduate school, I worked as a Software Engineer at Ciena. I hold a Bachelor of Applied Science in Engineering Physics from the
+                        <a href="https://www.ubc.ca/">University of British Columbia</a>.
+                    </p>
+                    <p>
+                        My research sits at the intersection of computer vision and computer graphics, with a focus on reconstructing 3D
+                        surfaces from 2D images. In particular, I am interested in structured-light reconstruction driven by photometric cues,
+                        without the specialized hardware it traditionally requires.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr class="section-divider">
+    </section>
+
+    <section id="publications">
+        <div class="container">
+            <div class="section-wrapper">
+                <div class="section-title">Publications</div>
+                <div class="section-content">
+                    <div id="publications-container">
+                        <!-- Dynamic Content -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <hr class="section-divider">
+    </section>
+
+    <!--section id="talks">
+        <div class="container">
+            <div class="section-wrapper">
+                <div class="section-title">Talks</div>
+                <div class="section-content">
+
+                    <div id="talks-container">
+                        <Dynamic Content>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <hr class="section-divider">
+    </section!-->
+
+    <div id="toast">Email address copied!</div>
+
+    <script src="data/publications.js"></script>
+    <script src="data/talks.js"></script>
+    <script>
+        // Data Rendering Engine
+        function loadData() {
+            try {
+                // Use global variables from included scripts
+                if (typeof publicationsData !== 'undefined' && typeof talksData !== 'undefined') {
+                    renderPublications(publicationsData);
+                    renderTalks(talksData);
+                    initScrollSpy();
+                } else {
+                    console.error("Data variables not found.");
+                }
+            } catch (error) {
+                console.error("Error loading data:", error);
+            }
+        }
+
+        function renderPublications(pubs) {
+            const container = document.getElementById('publications-container');
+            if (pubs.length === 0) {
+                container.innerHTML = '<p class="coming-soon">Coming soon.</p>';
+                return;
+            }
+            container.innerHTML = pubs.map(pub => {
+                const mediaHTML = pub.media && pub.media.src ? (pub.media.type === 'video'
+                    ? `<video src="${pub.media.src}" autoplay muted loop playsinline></video>`
+                    : `<img src="${pub.media.src}" alt="Paper thumbnail">`) : `<div style="width:200px;height:120px;background:#f5f5f5;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#888;box-shadow: 0 2px 8px rgba(0,0,0,0.1);">Image Pending</div>`;
+
+                const badgesHTML = (pub.badges || []).map(badge =>
+                    `<span class="pub-badge">${badge.text.includes('Highlight') ? '⭐ ' : ''}${badge.text}</span>`
+                ).join(' ');
+
+                // Re-construct authors HTML if not provided directly
+                const authorsHTML = pub.authors.map(author => {
+                    if (author.includes("Rudy Lam")) {
+                        return `<a class="author me" href="https://rudylam.github.io" target="_blank">${author}</a>`;
+                    }
+                    // Add other author links if available in data, otherwise just text
+                    return `<span class="author">${author}</span>`;
+                }).join(', ');
+
+                const linksHTML = pub.links.map(link =>
+                    `<a href="${link.url}" class="pub-link">${link.label}</a>`
+                ).join('\n');
+
+                const abstractHTML = pub.abstract ? `<p class="pub-abstract">${pub.abstract}</p>` : '';
+
+                return `
+                    <div class="publication ${pub.highlightOnIndex ? 'highlighted-publication' : ''}">
+                        ${mediaHTML}
+                        <div class="pub-info">
+                            <p><strong><a href="${pub.links[0]?.url || '#'}">${pub.title}</a></strong><br>
+                                ${authorsHTML}<br>
+                                <span class="conference">${pub.venue} &middot; ${pub.year} &middot; ${pub.location}</span>
+                                ${badgesHTML}<br>
+                            </p>
+                            ${abstractHTML}
+                            <div class="pub-links">
+                                ${linksHTML}
+                                <details class="pub-link">
+                                    <summary>Cite</summary>
+                                    <pre>${pub.bibtex}</pre>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderTalks(talks) {
+            const container = document.getElementById('talks-container');
+            if (!container) return; // Talks section is hidden
+            container.innerHTML = talks
+                .filter(talk => talk.showOnIndex || talk.isInvited)
+                .map(talk => `
+                    <div class="talk">
+                        <div class="talk-info">
+                            <strong>${talk.title}</strong>, <span class="conference">${talk.venue}, ${talk.year}</span>
+                        </div>
+                    </div>
+                `).join('');
+        }
+
+        // Initialize Data
+        loadData();
+
+        // Theme Toggle Logic
+        const toggleBtn = document.getElementById('theme-toggle');
+        toggleBtn.addEventListener('click', () => {
+            const isDarkMode = document.body.classList.toggle('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        });
+
+        // Email Copy Logic
+        function copyEmail(event, email) {
+            navigator.clipboard.writeText(email).then(() => {
+                const toast = document.getElementById("toast");
+                if (!toast) return;
+                toast.className = "show";
+                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            });
+        }
+
+        // Section Scroll-Spy Logic
+        function initScrollSpy() {
+            const navLinks = document.querySelectorAll('.nav-links a');
+            const sections = Array.from(document.querySelectorAll('section[id]'));
+            const navbar = document.querySelector('.navbar');
+
+            // Active section = the last one whose top has scrolled past the navbar.
+            // If the user has scrolled to the very bottom, the last section wins
+            // (it may be too short to ever reach the top of the screen).
+            function updateActive() {
+                const offset = navbar.offsetHeight + 40;
+                let current = sections[0].id;
+                sections.forEach(section => {
+                    if (section.getBoundingClientRect().top - offset <= 0) {
+                        current = section.id;
+                    }
+                });
+                const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+                if (window.scrollY > 0 && atBottom) {
+                    current = sections[sections.length - 1].id;
+                }
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+                });
+            }
+
+            window.addEventListener('scroll', updateActive, { passive: true });
+            window.addEventListener('resize', updateActive);
+            updateActive();
+        }
+    </script>
+</body>
+
+</html>
